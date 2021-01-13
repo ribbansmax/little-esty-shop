@@ -5,17 +5,15 @@ RSpec.describe "Items Index" do
 
   describe 'displays' do
     it "merchant's items" do
-      merchant1 = create(:merchant, :with_items)
-      merchant2 = create(:merchant, :with_items)
+      merchant1 = create(:merchant)
+      item1 = create(:item, merchant: merchant1)
+      merchant2 = create(:merchant)
+      item2 = create(:item, merchant: merchant2)
 
       visit merchant_items_path(merchant1)
 
-      merchant1.items.each do |item|
-        expect(page).to have_link(item.name, href: item_path(item))
-      end
-      merchant2.items.each do |item|
-        expect(page).not_to have_content(item.name)
-      end
+      expect(page).to have_link(item1.name, href: item_path(item1))
+      expect(page).not_to have_content(item2.name)
     end
 
     it "link to create new item" do
@@ -123,7 +121,7 @@ RSpec.describe "Items Index" do
 
    it 'with buttons to disable/enable items' do
       item = create(:item, merchant: merchant)
-      
+
       visit merchant_items_path(merchant)
 
       within "#enabled" do

@@ -59,6 +59,7 @@ describe Item, type: :model do
       end
 
       it "selects the most popular items" do
+        not_top = create(:item, :failed_sales, merchant: @merchant1, unit_price: 1000)
         expect(Item.popular_items.to_set).to eq(@items.to_set)
       end
 
