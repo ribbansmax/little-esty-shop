@@ -105,10 +105,10 @@ RSpec.describe "Admin Dashboard" do
 
     it "can see each invoice id links to that invoice's admin show page" do
       within(@incomplete_invoice_section) do
-        click_on(@invoice1.id)
+        click_on("#{@invoice1.id}")
         expect(current_path).to eq("/admin/invoices/#{@invoice1.id}")
         visit "/admin"
-        click_on(@invoice2.id)
+        click_on("#{@invoice2.id}")
         expect(current_path).to eq("/admin/invoices/#{@invoice2.id}")
       end
     end

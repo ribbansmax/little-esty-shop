@@ -6,9 +6,9 @@ RSpec.describe "Edit Item" do
   it "has a form pre-filled with the item's attributes" do
     visit edit_item_path(item)
 
-    expect(page).to have_selector("input[value='#{item.name}']")
-    expect(page).to have_selector("input[value='#{item.description}']")
-    expect(page).to have_selector("input[value=#{item.unit_price}]")
+    expect(page.find_field("item[name]").value).to eq(item.name)
+    expect(page.find_field("item[description]").value).to eq(item.description)
+    expect(page.find_field("item[unit_price]").value).to eq(item.unit_price.to_s)
   end
 
   it "edits the item's attributes" do
