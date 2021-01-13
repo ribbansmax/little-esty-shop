@@ -8,7 +8,7 @@ RSpec.describe "Edit Item" do
 
     expect(page).to have_selector("input[value='#{item.name}']")
     expect(page).to have_selector("input[value='#{item.description}']")
-    expect(page).to have_selector("input[value='#{item.unit_price}']")
+    expect(page).to have_selector("input[value=#{item.unit_price}]")
   end
 
   it "edits the item's attributes" do

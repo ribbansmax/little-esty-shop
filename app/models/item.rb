@@ -3,6 +3,8 @@ class Item < ApplicationRecord
   has_many :invoices, through: :invoice_items
   belongs_to :merchant
 
+  validates_presence_of :name, :description, :unit_price
+
   scope :enabled, -> {where(enabled: true)}
   scope :disabled, -> {where(enabled: false)}
 
