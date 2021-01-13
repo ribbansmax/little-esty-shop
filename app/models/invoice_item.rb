@@ -9,8 +9,4 @@ class InvoiceItem < ApplicationRecord
   def self.invoice_amount
     sum('quantity * unit_price')
   end
-
-  def self.total_revenue
-    sum("quantity * unit_price")
-  end
 end
