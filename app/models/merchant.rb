@@ -5,7 +5,7 @@ class Merchant < ApplicationRecord
 
   validates :name, presence: true
 
-  delegate :favorite_customers, to: :customers
+  delegate :top_customers, to: :customers
   delegate :items_to_ship, to: :items
   delegate :total_revenue, to: :invoices
   delegate :best_day, to: :invoices

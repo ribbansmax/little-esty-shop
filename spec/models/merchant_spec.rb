@@ -14,7 +14,7 @@ describe Merchant, type: :model do
   end
 
   describe "delegates" do
-    it "favorite_customers;" do
+    it "top_customers;" do
       top_customers = [
           create(:customer, :with_transactions, successful: 6, merchant: merchant),
           create(:customer, :with_transactions, successful: 5, merchant: merchant),
@@ -28,7 +28,7 @@ describe Merchant, type: :model do
         create(:customer, :with_transactions, successful: 7)
       ]
 
-      expect(merchant.favorite_customers).to eq(top_customers)
+      expect(merchant.top_customers).to eq(top_customers)
     end
 
     it 'items_to_ship;' do
@@ -61,12 +61,12 @@ describe Merchant, type: :model do
   describe "class methods" do
     it "top_merchants" do
       merchant1 = create(:merchant)
-      create(:item, :sold, merchant: merchant1, sales: 100)
+      create(:item, :sold, merchant: merchant1, sales: 1)
       merchant2 = create(:merchant)
-      create(:item, :sold, merchant: merchant2, sales: 200)
+      create(:item, :sold, merchant: merchant2, sales: 2)
       merchant3 = create(:merchant)
-      create(:item, :sold, merchant: merchant3, sales: 300)
-      
+      create(:item, :sold, merchant: merchant3, sales: 3)
+
       expect(Merchant.top_merchants(1)).to eq([merchant3])
       expect(Merchant.top_merchants(2)).to eq([merchant3, merchant2])
     end

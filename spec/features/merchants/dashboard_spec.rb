@@ -43,7 +43,7 @@ RSpec.describe "Merchant Dashboard" do
         visit dashboard_merchant_path(merchant)
 
         expect(page).not_to have_content("#{not_top.first_name} #{not_top.last_name}")
-        within "#favorite_customers" do
+        within "#top_customers" do
           top_customers.each_with_index do |customer, index|
             expect(page).to have_content("#{customer.first_name} #{customer.last_name}")
             expect(page).to have_content("#{6 - index} purchase(s)")
