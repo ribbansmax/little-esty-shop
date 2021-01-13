@@ -13,6 +13,7 @@ RSpec.describe "New Item" do
 
     expect(current_path).to eq(merchant_items_path(merchant))
     expect(page).to have_content("LOUD ONION")
+    expect(page).to have_button("Enable")
   end
 
   it "does not allow creation of incomplete items" do
