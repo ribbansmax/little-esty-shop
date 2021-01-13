@@ -45,6 +45,17 @@ rails server
 ## Database Scheme
 ![Schema](media/database_schema.png)
 
+## Technologies
+- Ruby
+- Ruby on Rails
+### Utilities
+- rspec-rails
+- factory_bot_rails
+- faker
+- simplecov
+- webmock
+
+
 ## Project details 
 From [Turing School](https://github.com/turingschool-examples/little-esty-shop)
 
