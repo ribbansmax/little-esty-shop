@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Merchant Dashboard" do
-  let(:merchant) {create(:merchant)}
+  let!(:merchant) {create(:merchant)}
 
   describe "displays" do
     it "the merchant name" do
@@ -29,7 +29,6 @@ RSpec.describe "Merchant Dashboard" do
 
   describe "has section for" do
     describe "Favorite Customers" do
-      let!(:merchant) {create(:merchant)}
       let!(:top_customers)  {[
           create(:customer, :with_transactions, successful: 6, merchant: merchant),
           create(:customer, :with_transactions, successful: 5, merchant: merchant),
@@ -74,33 +73,37 @@ RSpec.describe "Merchant Dashboard" do
     end
 
     describe 'items ready to ship' do
-      before :each do
-        @items = create_list(:item, 6, merchant: merchant)
-        @items.first(4).each_with_index do |item, index|
-          invoice = create(:invoice, merchant: merchant, id: item.id, created_at: (Date.today - index))
-          create(:invoice_item, item: item, invoice: invoice, status: 1)
+      let!(:ready_to_ship) {create_list(:item, 4, :with_status, status: "packaged", merchant: merchant)}
+
+      it 'displays items with invoice_item status pending' do
+        pending_item = create(:item, :with_status, status: "pending", merchant: merchant)
+        shipped_item = create(:item, :with_status, status: "shipped", merchant: merchant)
+        unordered_item = create(:item, merchant: merchant)
+
+        visit dashboard_merchant_path(merchant)
+
+        within "#items_to_ship" do
+          expect(page).to have_content("Items Ready to Ship")
+          ready_to_ship.each do |item|
+            within("#item-#{item.id}")
+              expect(page).to have_content(item.name)
+              invoice = item.invoices[0]
+              expect(page).to have_link("Invoice ##{invoice.id}",
+                href: merchant_invoice_path(merchant.id, invoice.id))
+              expect(page).to have_content(invoice.created_at.strftime("%A, %B %-d, %Y"))
+            end
+          expect(page).not_to have_content(pending_item.name)
+          expect(page).not_to have_content(shipped_item.name)
+          expect(page).not_to have_content(unordered_item.name)
         end
       end
 
-      it 'displays items that are ready to ship' do
+      it 'does not display items of other merchants' do
+        item = create(:item)
+
         visit dashboard_merchant_path(merchant)
 
-        expect(page).to have_content("Items Ready to Ship")
-        within "#items_to_ship" do
-          ready = @items.first(4).reverse
-          not_ready = @items.last(2)
-          ready.each_with_index do |item, index|
-            within "#item-#{index}" do
-              expect(page).to have_content(item.name)
-              invoice = Invoice.find(item.id)
-              expect(page).to have_link("Invoice ##{invoice.id}", href: merchant_invoice_path(merchant.id, invoice.id))
-              expect(page).to have_content(invoice.created_at.strftime("%A, %B %-d, %Y"))
-            end
-          end
-          not_ready.each do |item|
-            expect(page).not_to have_content(item.name)
-          end
-        end
+        expect(page).not_to have_content(item.name)
       end
 
       it 'displays items ordered by invoice creation date' do
