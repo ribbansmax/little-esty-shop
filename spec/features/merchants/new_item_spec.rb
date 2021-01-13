@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "New Item" do
   let(:merchant) {create(:merchant)}
 
-  it "the item's attributes" do
+  it "creates a new item" do
     visit new_merchant_item_path(merchant)
 
     fill_in("item[name]", with: "LOUD ONION")
@@ -24,7 +24,4 @@ RSpec.describe "New Item" do
     expect(page).to have_content("Description can't be blank")
     expect(page).to have_content("Unit price can't be blank")
   end
-
-
-
 end
