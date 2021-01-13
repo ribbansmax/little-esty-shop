@@ -8,7 +8,7 @@ class Merchant < ApplicationRecord
   delegate :top_customers, to: :customers
   delegate :items_to_ship, to: :items
   delegate :total_revenue, to: :invoices
-  delegate :best_day, to: :invoices
+  delegate :top_sales_day, to: :invoices
 
   def self.top_merchants(number = 5)
     joins(invoices: [:transactions, :invoice_items])

@@ -43,12 +43,12 @@ describe Merchant, type: :model do
       expect(merchant.items_to_ship).to eq(ready_to_ship)
     end
 
-    it "best_day" do
+    it "top_sales_day" do
       create(:item, :sold, merchant: merchant, unit_price: 100, invoice_date: Date.today)
-      create(:item, :sold, merchant: merchant, unit_price: 150, invoice_date: Date.today - 1)
-      create(:item, :sold, merchant: merchant, unit_price: 200, invoice_date: Date.today - 2)
+      create(:item, :sold, merchant: merchant, unit_price: 150, invoice_date: Date.today + 1.day)
+      create(:item, :sold, merchant: merchant, unit_price: 200, invoice_date: Date.today + 2.days)
 
-      expect(merchant.best_day).to eq(Date.today - 2)
+      expect(merchant.top_sales_day).to eq(Date.today + 2.days)
     end
 
     it "total_revenue" do

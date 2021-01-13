@@ -23,7 +23,7 @@
   <% @top_merchants.each do |merchant| %>
     <li id="merchant-<%= merchant.id %>">
       <p><%= merchant.name %>($<%= merchant.total_revenue/100 %>)</p>
-      <p>Top selling date for <%= merchant.name %> was <%= merchant.best_day %></p>
+      <p>Top selling date for <%= merchant.name %> was <%= merchant.top_sales_day %></p>
     </li>
   <% end %>
 </ol>
