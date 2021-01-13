@@ -3,8 +3,7 @@ require 'rails_helper'
 RSpec.describe "Items Index" do
   describe 'displays' do
     it "the item's attributes" do
-      merchant1 = create(:merchant)
-      item = create(:item, merchant: merchant1)
+      item = create(:item)
 
       visit item_path(item)
 
@@ -13,9 +12,8 @@ RSpec.describe "Items Index" do
       expect(page).to have_content("Price: #{item.unit_price}")
     end
 
-    it "an update button" do
-      merchant1 = create(:merchant)
-      item = create(:item, merchant: merchant1)
+    it "a link to update the item" do
+      item = create(:item)
 
       visit item_path(item)
 
