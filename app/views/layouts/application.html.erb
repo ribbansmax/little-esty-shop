@@ -10,6 +10,11 @@
   </head>
 
   <body>
+    <header class="admin">
+      <%= link_to "Admin Dashboard", admin_path %>
+      <%= link_to "Admin Merchants Index", admin_merchants_path %>
+      <%= link_to "Merchants Index", merchants_path %>
+    </header class="admin">
     <ul id="flash-messages" >
     <% flash.each do |notice, message| %>
       <li><%= message %></li>
