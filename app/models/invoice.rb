@@ -19,4 +19,21 @@ class Invoice < ApplicationRecord
   def total_revenue
     invoice_items.sum("quantity * unit_price")
   end
+
+  def self.best_day
+    joins(:transactions, :invoice_items)
+    .where("result = 0")
+    .select("CAST (invoices.created_at AS DATE) as created_date, sum(quantity * unit_price) as revenue")
+    .group("created_date")
+    .order("revenue" => :desc)
+    .limit(1)
+    .first.created_date
+  end
+
+  def self.total_revenue
+    joins(:transactions, :invoice_items)
+    .where("result = 0")
+    .select('quantity, unit_price')
+    .sum("quantity * unit_price")
+  end
 end
