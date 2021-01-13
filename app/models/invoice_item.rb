@@ -3,10 +3,14 @@ class InvoiceItem < ApplicationRecord
   belongs_to :invoice
 
   enum status: ["pending", "packaged", "shipped"]
-  
+
   delegate :name, to: :item, prefix: true
 
   def self.invoice_amount
     sum('quantity * unit_price')
+  end
+
+  def self.total_revenue
+    sum("quantity * unit_price")
   end
 end

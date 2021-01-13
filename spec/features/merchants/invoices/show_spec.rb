@@ -13,7 +13,7 @@ RSpec.describe "Merchant Invoices show" do
       # create(:transaction, invoice: invoice, result: 0)
 
       visit merchant_invoice_path(merchant1, invoice)
-  
+
       expect(page).to have_content(invoice.id)
       expect(page).to have_content(invoice.created_at.strftime("%A, %B %-d, %Y"))
       expect(page).to have_content(invoice.status)
@@ -107,7 +107,7 @@ RSpec.describe "Merchant Invoices show" do
 
       visit merchant_invoice_path(merchant1, invoice)
 
-      expect(page).to have_content("Total Revenue: $#{invoice.total_revenue}")
+      expect(page).to have_content("Total Revenue: $#{invoice.invoice_amount}")
     end
   end
 end

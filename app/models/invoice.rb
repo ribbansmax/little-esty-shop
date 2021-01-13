@@ -7,6 +7,8 @@ class Invoice < ApplicationRecord
 
   enum status: ['in progress', 'completed', 'cancelled']
 
+  delegate :invoice_amount, to: :invoice_items
+
   def self.incomplete_invoices
     where(status: "in progress").order(created_at: :asc)
   end
@@ -23,12 +25,7 @@ class Invoice < ApplicationRecord
 
   def self.total_revenue
     joins(:transactions, :invoice_items)
-    .where("result = 0")
-    .select('quantity, unit_price')
+    .where(transactions: {result: 0})
     .sum("quantity * unit_price")
-  end
-
-  def total_revenue
-    invoice_items.sum("quantity * unit_price")
   end
 end
