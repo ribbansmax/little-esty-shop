@@ -13,7 +13,7 @@
 - Webmock is used to mock API tests
 - Edge cases were added to enhance testing
 - Added view methods in application helper to declutter view calls 
-- Deployed application to [Heroku](https://gentle-forest-90792.herokuapp.com/)
+- Deployed application to [Heroku](https://gentle-forest-90792.herokuapp.com/admin)
 
 ## Setup
 This project requires Ruby 2.5.3.  
