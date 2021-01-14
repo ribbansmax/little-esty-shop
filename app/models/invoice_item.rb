@@ -3,7 +3,7 @@ class InvoiceItem < ApplicationRecord
   belongs_to :invoice
 
   enum status: ["pending", "packaged", "shipped"]
-  
+
   delegate :name, to: :item, prefix: true
 
   def self.invoice_amount
