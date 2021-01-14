@@ -11,7 +11,7 @@
 - Utilize advanced active record techniques to perform complex database queries
 - Created a service class and poros search to consume GitHub API
 - Webmock is used to mock API tests
-- Multiple edge cases were added to enhance testing
+- Edge cases were added to enhance testing
 - Added view methods in application helper to declutter view calls 
 - Deployed application to [Heroku](https://gentle-forest-90792.herokuapp.com/)
 
