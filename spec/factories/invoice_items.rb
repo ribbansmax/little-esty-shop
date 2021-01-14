@@ -5,5 +5,10 @@ FactoryBot.define do
     quantity { Faker::Number.between(from: 1, to: 10) }
     unit_price { Faker::Number.between(from: 1, to: 100) }
     status {["pending", "packaged", "shipped"].sample}
+
+
+    trait :sequenced do
+      sequence :quantity
+    end
   end
 end
