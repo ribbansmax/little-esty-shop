@@ -8,4 +8,12 @@ describe Transaction, type: :model do
   describe "relations" do
     it {should belong_to :invoice}
   end
+
+  describe "class methods" do
+    it "number_of_successful_transactions" do
+      create_list(:transaction, 5, result: 0)
+
+      expect(Transaction.number_of_successful_transactions).to eq(5)
+    end
+  end
 end

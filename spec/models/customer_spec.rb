@@ -33,7 +33,7 @@ describe Customer, type: :model do
     end
   end
 
-  describe "instance methods" do
+  describe "delegates" do
     it "number_of_successful_transactions" do
       customers = []
       10.times { customers << create(:customer) }
