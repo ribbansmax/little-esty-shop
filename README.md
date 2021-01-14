@@ -33,14 +33,15 @@ rails db:setup
 rake csv_load:all
 ```
 ## Usage
-Check functionalities with 
+Run the testing suite in the terminal with
 ```
 bundle exec rspec
 ```
-Navigate local host with 
+Start the server in the command line with 
 ```
 rails server
 ```
+Navigate [localhost:3000](http://localhost:3000)
 
 ## Database Scheme
 ![Schema](media/database_schema.png)
