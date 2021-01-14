@@ -1,103 +1,118 @@
 require "rails_helper"
 
 RSpec.describe "Merchant Dashboard" do
-  let(:merchant1) do
-    create(:merchant)
-  end
+  let!(:merchant) {create(:merchant)}
 
-  describe "Displays" do
+  describe "displays" do
     it "the merchant name" do
-      visit dashboard_merchant_path(merchant1)
+      visit dashboard_merchant_path(merchant)
 
-      expect(page).to have_content(merchant1.name)
+      expect(page).to have_content(merchant.name)
     end
 
     it "link to merchant's item index" do
-      visit dashboard_merchant_path(merchant1)
+      visit dashboard_merchant_path(merchant)
 
       click_link "My Items"
 
-      expect(current_path).to eq(merchant_items_path(merchant1))
+      expect(current_path).to eq(merchant_items_path(merchant))
     end
 
     it "link to merchant's invoices index" do
-      visit dashboard_merchant_path(merchant1)
+      visit dashboard_merchant_path(merchant)
 
       click_link "My Invoices"
 
-      expect(current_path).to eq(merchant_invoices_path(merchant1))
+      expect(current_path).to eq(merchant_invoices_path(merchant))
     end
+  end
 
-    describe "the statistics, including:" do
-      it "the top 5 customers" do
-        create_list(:customer, 10)
-        Customer.all.each_with_index do |customer, index|
-          (index + 1).times do
-            invoice = create(:invoice, merchant: merchant1, customer: customer)
-            create(:transaction, invoice: invoice, result: 0)
-          end
-        end
+  describe "has section for" do
+    describe "Favorite Customers" do
+      let!(:top_customers)  {[
+          create(:customer, :with_transactions, successful: 6, merchant: merchant),
+          create(:customer, :with_transactions, successful: 5, merchant: merchant),
+          create(:customer, :with_transactions, successful: 4, merchant: merchant),
+          create(:customer, :with_transactions, successful: 3, merchant: merchant),
+          create(:customer, :with_transactions, successful: 2, merchant: merchant),
+        ]}
 
-        Customer.order(id: :desc).each_with_index do |customer, index|
-          (index + 2).times do
-            invoice = create(:invoice, customer: customer)
-            create(:transaction, invoice: invoice, result: 1)
-          end
-        end
+      it "listing the top 5 customers, with purchase counts, in order" do
+        not_top = create(:customer, :with_transactions, successful: 1, merchant: merchant)
 
-        visit dashboard_merchant_path(merchant1)
+        visit dashboard_merchant_path(merchant)
 
-        within "#favorite_customers" do
-          best_customers = Customer.last(5)
-          not_best_customers = Customer.first(5)
-          best_customers.each_with_index do |customer, index|
+        expect(page).not_to have_content("#{not_top.first_name} #{not_top.last_name}")
+        within "#top_customers" do
+          top_customers.each_with_index do |customer, index|
             expect(page).to have_content("#{customer.first_name} #{customer.last_name}")
-            expect(page).to have_content("#{index + 6} purchases")
+            expect(page).to have_content("#{6 - index} purchase(s)")
           end
-          not_best_customers.each do |customer|
-            expect(page).to_not have_content("#{customer.first_name} #{customer.last_name}")
-          end
+          expect(top_customers[0].last_name).to appear_before(top_customers[1].last_name)
+          expect(top_customers[1].last_name).to appear_before(top_customers[2].last_name)
+          expect(top_customers[2].last_name).to appear_before(top_customers[3].last_name)
+          expect(top_customers[3].last_name).to appear_before(top_customers[4].last_name)
         end
       end
 
-      describe 'items ready to ship' do
-        before :each do
-          @items = create_list(:item, 6, merchant: merchant1)
-          @items.first(4).each_with_index do |item, index|
-            invoice = create(:invoice, merchant: merchant1, id: item.id, created_at: (Date.today - index))
-            create(:invoice_item, item: item, invoice: invoice, status: 1)
-          end
-        end
+      it "does not include failed transactions with my merchant" do
+        not_top = create(:customer, :with_transactions, successful: 1, failed: 7, merchant: merchant)
 
-        it 'displays items that are ready to ship' do
-          visit dashboard_merchant_path(merchant1)
+        visit dashboard_merchant_path(merchant)
 
+        expect(page).not_to have_content("#{not_top.first_name} #{not_top.last_name}")
+      end
+
+      it "does not include successful transactions with other merchants" do
+        not_top = create(:customer, :with_transactions, successful: 7)
+
+        visit dashboard_merchant_path(merchant)
+
+        expect(page).not_to have_content("#{not_top.first_name} #{not_top.last_name}")
+      end
+    end
+
+    describe 'items ready to ship' do
+      let!(:ready_to_ship) {create_list(:item, 4, :with_status, status: "packaged", merchant: merchant)}
+
+      it 'displays items with invoice_item status pending' do
+        pending_item = create(:item, :with_status, status: "pending", merchant: merchant)
+        shipped_item = create(:item, :with_status, status: "shipped", merchant: merchant)
+        unordered_item = create(:item, merchant: merchant)
+
+        visit dashboard_merchant_path(merchant)
+
+        within "#items_to_ship" do
           expect(page).to have_content("Items Ready to Ship")
-          within "#items_to_ship" do
-            ready = @items.first(4).reverse
-            not_ready = @items.last(2)
-            ready.each_with_index do |item, index|
-              within "#item-#{index}" do
-                expect(page).to have_content(item.name)
-                invoice = Invoice.find(item.id)
-                expect(page).to have_link("Invoice ##{invoice.id}", href: merchant_invoice_path(merchant1.id, invoice.id))
-                expect(page).to have_content(invoice.created_at.strftime("%A, %B %-d, %Y"))
-              end
+          ready_to_ship.each do |item|
+            within("#item-#{item.id}")
+              expect(page).to have_content(item.name)
+              invoice = item.invoices[0]
+              expect(page).to have_link("Invoice ##{invoice.id}",
+                href: merchant_invoice_path(merchant.id, invoice.id))
+              expect(page).to have_content(invoice.created_at.strftime("%A, %B %-d, %Y"))
             end
-            not_ready.each do |item|
-              expect(page).not_to have_content(item.name)
-            end
-          end
+          expect(page).not_to have_content(pending_item.name)
+          expect(page).not_to have_content(shipped_item.name)
+          expect(page).not_to have_content(unordered_item.name)
         end
+      end
 
-        it 'displays items ordered by invoice creation date' do
-          visit dashboard_merchant_path(merchant1)
+      it 'does not display items of other merchants' do
+        item = create(:item)
 
-          invoices = Invoice.order(:created_at)
-          expect("Invoice ##{invoices[0].id}").to appear_before("Invoice ##{invoices[1].id}")
-          expect("Invoice ##{invoices[1].id}").to appear_before("Invoice ##{invoices[2].id}")
-          expect("Invoice ##{invoices[2].id}").to appear_before("Invoice ##{invoices[3].id}")
-        end
+        visit dashboard_merchant_path(merchant)
+
+        expect(page).not_to have_content(item.name)
+      end
+
+      it 'displays items ordered by invoice creation date' do
+        visit dashboard_merchant_path(merchant)
+
+        invoices = Invoice.order(:created_at)
+        expect("Invoice ##{invoices[0].id}").to appear_before("Invoice ##{invoices[1].id}")
+        expect("Invoice ##{invoices[1].id}").to appear_before("Invoice ##{invoices[2].id}")
+        expect("Invoice ##{invoices[2].id}").to appear_before("Invoice ##{invoices[3].id}")
       end
     end
   end

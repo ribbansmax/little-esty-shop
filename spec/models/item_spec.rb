@@ -3,8 +3,14 @@ require "rails_helper"
 describe Item, type: :model do
   describe "relations" do
     it {should have_many :invoice_items}
-    it {should have_many :invoices}
+    it {should have_many(:invoices).through(:invoice_items)}
     it {should belong_to :merchant}
+  end
+
+  describe "validations" do
+    it {should validate_presence_of :name}
+    it {should validate_presence_of :description}
+    it {should validate_presence_of :unit_price}
   end
 
   describe "scopes" do
@@ -53,6 +59,7 @@ describe Item, type: :model do
       end
 
       it "selects the most popular items" do
+        not_top = create(:item, :failed_sales, merchant: @merchant1, unit_price: 1000)
         expect(Item.popular_items.to_set).to eq(@items.to_set)
       end
 

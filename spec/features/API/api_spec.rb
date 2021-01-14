@@ -20,7 +20,8 @@ RSpec.describe "API page" do
 
       page.find_all('li').each do |element|
         within(element) do
-          expect(page).to have_content('commits') #doesn't actually check commit numbers here
+          expect(page).to have_content('commits')
+          expect(page.text.split("(").last.to_i).to be > 0
         end
       end
     end
@@ -33,6 +34,5 @@ RSpec.describe "API page" do
       expect(page).to have_content('merged pull requests')
       expect(page.find("#pull-requests").text.split(" ").last.to_i).to be > 0
     end
-
   end
 end

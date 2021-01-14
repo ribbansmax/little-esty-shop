@@ -44,7 +44,7 @@ describe Invoice, type: :model do
   end
 
   describe "model methods" do
-    it "total_revenue" do
+    it "invoice_amount" do
       merchant1 = create(:merchant)
       items = create_list(:item, 5, merchant: merchant1, unit_price: 1)
 
@@ -57,7 +57,7 @@ describe Invoice, type: :model do
       end
       # create(:transaction, invoice: invoice, result: 0)
 
-      expect(invoice.total_revenue).to eq(25)
+      expect(invoice.invoice_amount).to eq(25)
     end
   end
 end
