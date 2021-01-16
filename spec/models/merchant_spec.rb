@@ -6,6 +6,7 @@ describe Merchant, type: :model do
   describe "relations" do
     it {should have_many :invoices}
     it {should have_many :items}
+    it {should have_many :bulk_discounts}
     it {should have_many(:customers).through(:invoices)}
   end
 
