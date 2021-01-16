@@ -9,7 +9,7 @@ FactoryBot.define do
       transient {status {0}}
 
       after(:create) do |item, transient|
-        invoice = create(:invoice, :sequenced, merchant: item.merchant)
+        invoice = create(:invoice, :sequenced)
         create(:invoice_item, item: item, invoice: invoice, status: transient.status)
       end
     end
@@ -21,7 +21,7 @@ FactoryBot.define do
 
       after(:create) do |item, transient|
         transient.sales.times do
-          invoice = create(:sequenced_successful_invoices, merchant: item.merchant, created_at: transient.invoice_date)
+          invoice = create(:sequenced_successful_invoices, created_at: transient.invoice_date)
           create(:invoice_item, item: item, invoice: invoice, unit_price: 1, quantity: 1)
         end
       end
@@ -29,7 +29,7 @@ FactoryBot.define do
 
     trait :failed_sales do
       after(:create) do |item|
-        invoice = create(:invoice, :with_failed_transaction, merchant: item.merchant)
+        invoice = create(:invoice, :with_failed_transaction)
         create(:invoice_item, item: item, invoice: invoice, unit_price: 1, quantity: 1)
       end
     end

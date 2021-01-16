@@ -36,7 +36,7 @@ describe Invoice, type: :model do
 
   describe "relations" do
     it {should belong_to :customer}
-    it {should belong_to :merchant}
+    # it {should belong_to :merchant}
     it {should have_many :transactions}
 
     it {should have_many :invoice_items}
@@ -50,7 +50,7 @@ describe Invoice, type: :model do
 
       customer = create(:customer, first_name: "Linda", last_name: "Mayhew")
 
-      invoice = create(:invoice, merchant: merchant1, customer: customer)
+      invoice = create(:invoice, customer: customer)
 
       items.each do |item|
         create(:invoice_item, item: item, invoice: invoice, quantity: 5, unit_price: 1)

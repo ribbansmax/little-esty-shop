@@ -2,8 +2,8 @@ class Invoice < ApplicationRecord
   has_many :invoice_items
   has_many :items, through: :invoice_items
   has_many :transactions
+  has_many :merchants, through: %i[invoice_items items]
   belongs_to :customer
-  belongs_to :merchant
 
   enum status: ['in progress', 'completed', 'cancelled']
 
@@ -14,18 +14,17 @@ class Invoice < ApplicationRecord
   end
 
   def self.top_sales_day
-    unscope(:joins)
-    .joins(:transactions, :invoice_items)
+    joins(:transactions)
     .where(transactions: {result: 0})
-    .select("CAST (invoices.created_at AS DATE), sum(quantity * unit_price) as revenue")
+    .select("CAST (invoices.created_at AS DATE), sum(quantity * invoice_items.unit_price) as revenue")
     .group(:created_at)
     .order("revenue"=> :desc, :created_at=> :desc)
     .first.created_at
   end
 
   def self.total_revenue
-    joins(:transactions, :invoice_items)
+    joins(:transactions)
     .where(transactions: {result: 0})
-    .sum("quantity * unit_price")
+    .sum("quantity * invoice_items.unit_price")
   end
 end

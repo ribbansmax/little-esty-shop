@@ -1,8 +1,8 @@
 class Merchant < ApplicationRecord
   has_many :items
-  has_many :invoices
+  has_many :invoices, through: :items
   has_many :bulk_discounts
-  has_many :customers,-> {distinct}, through: :invoices
+  has_many :customers,-> {distinct}, through: :items
 
   validates :name, presence: true
 
@@ -12,10 +12,10 @@ class Merchant < ApplicationRecord
   delegate :top_sales_day, to: :invoices
 
   def self.top_merchants(number = 5)
-    joins(invoices: [:transactions, :invoice_items])
+    joins(invoices: :transactions)
     .where("result = 0")
     .group(:id)
-    .select('merchants.*, sum(quantity * unit_price) as total_revenue')
+    .select('merchants.*, sum(quantity * invoice_items.unit_price) as total_revenue')
     .order("total_revenue" => :desc)
     .limit(number)
   end

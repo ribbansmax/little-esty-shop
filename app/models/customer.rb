@@ -5,8 +5,7 @@ class Customer < ApplicationRecord
   delegate :number_of_successful_transactions, to: :transactions
 
   def self.top_customers(number = 5)
-    unscope(:joins)
-    .select("customers.*, count(*) AS count")
+    select("customers.*, count(*) AS count")
     .joins(:transactions)
     .where(transactions: {result: 0})
     .group(:id)

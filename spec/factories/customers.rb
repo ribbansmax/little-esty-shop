@@ -5,7 +5,7 @@ FactoryBot.define do
     address { Faker::Address.full_address}
 
     trait :with_transactions do
-      transient { merchant { create(:merchant)} }
+      # transient { merchant { create(:merchant)} }
       transient { successful {1}}
       transient { failed {1}}
 
@@ -13,13 +13,13 @@ FactoryBot.define do
         transient.successful.times do
           create(:invoice,
                  :with_successful_transaction,
-                 merchant: transient.merchant,
+                #  merchant: transient.merchant,
                  customer: customer)
         end
         transient.failed.times do
           create(:invoice,
                  :with_failed_transaction,
-                  merchant: transient.merchant,
+                  # merchant: transient.merchant,
                   customer: customer)
         end
       end
