@@ -11,4 +11,11 @@ RSpec.describe "Bulk Discount Index" do
       expect(page).to have_link("#{discount.discount * 100}% off", href: merchant_discount_path(merchant, discount))
     end
   end
+
+  it "displays link to create new discount" do
+    merchant = create(:merchant)
+    visit merchant_discounts_path(merchant)
+
+    expect(page).to have_link("New Discount", href: new_merchant_discount_path(merchant))
+  end
 end
