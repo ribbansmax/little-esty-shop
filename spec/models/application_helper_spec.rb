@@ -14,4 +14,12 @@ RSpec.describe "Application Helper" do
     actual = "Saturday, January 9, 2021"
     expect(actual).to eq(expected)
   end
+
+  it "formats percentage" do
+    expected = "20.0% off"
+    merchant = create(:merchant)
+    discount = create(:bulk_discount, merchant: merchant, discount: 0.20)
+    actual = percentage(discount)
+    expect(actual).to eq(expected)
+  end
 end
