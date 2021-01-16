@@ -29,24 +29,32 @@ RSpec.describe "Merchant Dashboard" do
 
   describe "has section for" do
     describe "Favorite Customers" do
+      # let(:merchant) {create(:merchant)}
+      let!(:item) {create(:item, merchant: merchant)}
       let!(:top_customers)  {[
-          create(:customer, :with_transactions, successful: 6, merchant: merchant),
-          create(:customer, :with_transactions, successful: 5, merchant: merchant),
-          create(:customer, :with_transactions, successful: 4, merchant: merchant),
-          create(:customer, :with_transactions, successful: 3, merchant: merchant),
-          create(:customer, :with_transactions, successful: 2, merchant: merchant),
+          create(:customer, :with_transactions, successful: 6),
+          create(:customer, :with_transactions, successful: 5),
+          create(:customer, :with_transactions, successful: 4),
+          create(:customer, :with_transactions, successful: 3),
+          create(:customer, :with_transactions, successful: 2),
         ]}
 
       it "listing the top 5 customers, with purchase counts, in order" do
-        not_top = create(:customer, :with_transactions, successful: 1, merchant: merchant)
+        top_customers.each_with_index do |customer, index|
+          invoice = create(:invoice, customer: customer)
+          create_list(:transaction, 10 - index, invoice: invoice, result: 0)
+          create(:invoice_item, item: item, invoice: invoice)
+        end
+        not_top = create(:customer, :with_transactions, successful: 1)
 
         visit dashboard_merchant_path(merchant)
 
         expect(page).not_to have_content("#{not_top.first_name} #{not_top.last_name}")
         within "#top_customers" do
+          # binding.pry
           top_customers.each_with_index do |customer, index|
             expect(page).to have_content("#{customer.first_name} #{customer.last_name}")
-            expect(page).to have_content("#{6 - index} purchase(s)")
+            expect(page).to have_content("#{16 - 2*(index)} purchase(s)")
           end
           expect(top_customers[0].last_name).to appear_before(top_customers[1].last_name)
           expect(top_customers[1].last_name).to appear_before(top_customers[2].last_name)
@@ -56,7 +64,7 @@ RSpec.describe "Merchant Dashboard" do
       end
 
       it "does not include failed transactions with my merchant" do
-        not_top = create(:customer, :with_transactions, successful: 1, failed: 7, merchant: merchant)
+        not_top = create(:customer, :with_transactions, successful: 1, failed: 7)
 
         visit dashboard_merchant_path(merchant)
 

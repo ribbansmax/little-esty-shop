@@ -8,6 +8,7 @@ describe Customer, type: :model do
 
   describe "class methods" do
     it "top_customers" do
+      dont_look = create(:customer, :with_transactions)
       customers = []
       10.times { customers << create(:customer) }
       customers.each do |customer|

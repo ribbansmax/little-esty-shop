@@ -7,7 +7,7 @@ RSpec.describe "Merchant Invoices index" do
       items = create_list(:item, 5, merchant: merchant1, unit_price: 1)
 
       5.times do |index|
-        invoice = create(:invoice, merchant: merchant1, created_at: Date.today - index)
+        invoice = create(:invoice, created_at: Date.today - index)
         items[index..-1].each do |item|
           create(:invoice_item, item: item, invoice: invoice, quantity: 5, unit_price: 1)
         end

@@ -66,7 +66,7 @@ describe "Admin Merchants Index Page" do
     merchants = []
     7.times do |i|
       merchants[i] = create(:merchant)
-      invoice1 = create(:invoice, merchant_id: merchants[i].id)
+      invoice1 = create(:invoice)
       item1 = create(:item, merchant_id: merchants[i].id)
       invoice_item1 = create(:invoice_item, quantity: 1, unit_price: 100000-100*i, invoice_id: invoice1.id, item_id: item1.id)
       transaction1 = create(:transaction, invoice_id: invoice1.id, result: 0)

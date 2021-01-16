@@ -6,7 +6,7 @@ RSpec.describe "Merchant Invoices show" do
       merchant1 = create(:merchant)
       items = create_list(:item, 5, merchant: merchant1, unit_price: 1)
 
-      invoice = create(:invoice, merchant: merchant1)
+      invoice = create(:invoice)
       items.each do |item|
         create(:invoice_item, item: item, invoice: invoice, quantity: 5, unit_price: 1)
       end
@@ -24,7 +24,7 @@ RSpec.describe "Merchant Invoices show" do
 
       customer = create(:customer, first_name: "Linda", last_name: "Mayhew")
 
-      invoice = create(:invoice, merchant: merchant1, customer: customer)
+      invoice = create(:invoice, customer: customer)
 
       items.each do |item|
         create(:invoice_item, item: item, invoice: invoice, quantity: 5, unit_price: 1)
@@ -42,7 +42,7 @@ RSpec.describe "Merchant Invoices show" do
 
       customer = create(:customer, first_name: "Linda", last_name: "Mayhew")
 
-      invoice = create(:invoice, merchant: merchant1, customer: customer)
+      invoice = create(:invoice, customer: customer)
 
       items.each do |item|
         create(:invoice_item, item: item, invoice: invoice, quantity: 5, unit_price: 1)
@@ -65,7 +65,7 @@ RSpec.describe "Merchant Invoices show" do
 
       customer = create(:customer, first_name: "Linda", last_name: "Mayhew")
 
-      invoice = create(:invoice, merchant: merchant1, customer: customer)
+      invoice = create(:invoice, customer: customer)
 
       items.each do |item|
         create(:invoice_item, item: item, invoice: invoice, quantity: 5, unit_price: 1)
@@ -98,7 +98,7 @@ RSpec.describe "Merchant Invoices show" do
 
       customer = create(:customer, first_name: "Linda", last_name: "Mayhew")
 
-      invoice = create(:invoice, merchant: merchant1, customer: customer)
+      invoice = create(:invoice, customer: customer)
 
       items.each do |item|
         create(:invoice_item, item: item, invoice: invoice, quantity: 5, unit_price: 1)
