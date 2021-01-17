@@ -8,6 +8,6 @@ module ApplicationHelper
   end
 
   def percentage(discount)
-    "#{discount.discount * 100}% off"
+    "#{(discount.discount * 100).round(2)}% off"
   end
 end

@@ -1,2 +1,3 @@
 <%= link_to percentage(bulk_discount), merchant_bulk_discount_path(params[:merchant_id], bulk_discount) %>
  after purchase of at least: <%= bulk_discount.threshold%> of one item
+<%= button_to "Delete", merchant_bulk_discount_path(params[:merchant_id], bulk_discount), method: :delete %>
