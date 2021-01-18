@@ -12,6 +12,11 @@ class InvoiceItem < ApplicationRecord
     sum('quantity * unit_price')
   end
 
+  def find_discount
+    discount = BulkDiscount.where(merchant_id: self.item.merchant_id).where('bulk_discounts.threshold <= ?', self.quantity).order(discount: :desc).limit(1)
+    self.update(bulk_discount_id: discount)
+  end
+
   def total_price
     # joins(:bulk_discounts).where('invoice_items.quantity >= bulk_discounts.threshold').sum('invoice_items.quantity * invoice_items.unit_price * (1 - bulk_discounts.discount)')
     # binding.pry
