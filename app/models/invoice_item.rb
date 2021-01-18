@@ -2,6 +2,7 @@ class InvoiceItem < ApplicationRecord
   belongs_to :item
   belongs_to :invoice
   has_many :bulk_discounts, through: :item
+  after_create :find_discount, :calculate_unit_price
 
   enum status: ["pending", "packaged", "shipped"]
 
@@ -29,7 +30,7 @@ class InvoiceItem < ApplicationRecord
 
   def set_unit_price
 
-    
+
     self.update('unit_price = ?', price)
   end
 end
