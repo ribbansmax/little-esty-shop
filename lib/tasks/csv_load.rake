@@ -15,7 +15,7 @@ namespace :csv_load do
   end
 
   task invoices: :environment do
-    from_csv(Invoice,"db/data/invoices.csv")
+    from_csv(Invoice,"db/data/new_invoices.csv")
   end
 
   task invoice_items: :environment do
