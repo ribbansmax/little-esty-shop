@@ -34,6 +34,7 @@ describe InvoiceItem, type: :model do
       invoice_item3 = FactoryBot.create(:invoice_item, invoice: invoice, item: item, quantity: 10)
       invoice_item4 = FactoryBot.create(:invoice_item, invoice: invoice, item: item, quantity: 110)
 
+      InvoiceItem.all.total_price
       expect(invoice_item1.total_price).to eq(invoice_item1.quantity * invoice_item1.unit_price * (1 - bulk_discount.discount))
       expect(invoice_item2.total_price).to eq(invoice_item2.quantity * invoice_item2.unit_price)
       expect(invoice_item3.total_price).to eq(invoice_item3.quantity * invoice_item3.unit_price * (1 - bulk_discount.discount))

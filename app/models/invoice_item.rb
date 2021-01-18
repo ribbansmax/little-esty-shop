@@ -26,4 +26,10 @@ class InvoiceItem < ApplicationRecord
       quantity * unit_price
     end
   end
+
+  def set_unit_price
+
+    
+    self.update('unit_price = ?', price)
+  end
 end
