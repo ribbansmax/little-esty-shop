@@ -7,6 +7,6 @@ RSpec.describe "Bulk Discount Index" do
 
     visit merchant_bulk_discount_path(merchant, discount)
 
-    expect(page).to have_link("#{discount.discount * 100}% off", href: merchant_bulk_discount_path(merchant, discount))
+    expect(page).to have_link("#{(discount.discount * 100).round(2)}% off", href: merchant_bulk_discount_path(merchant, discount))
   end
 end
