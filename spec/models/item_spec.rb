@@ -50,7 +50,7 @@ describe Item, type: :model do
         @items.each_with_index do |item, index|
           (5 - index).times do
             invoice = create(:invoice, items: [item])
-            create(:invoice_item, item_id: item.id, invoice_id: invoice.id, quantity: 1, unit_price: index + 10)
+            create(:invoice_item, item_id: item.id, invoice_id: invoice.id, quantity: 1).update(unit_price: index + 10)
             create(:transaction, invoice_id: invoice.id, result: 0)
           end
         end

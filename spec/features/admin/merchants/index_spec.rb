@@ -68,7 +68,7 @@ describe "Admin Merchants Index Page" do
       merchants[i] = create(:merchant)
       invoice1 = create(:invoice)
       item1 = create(:item, merchant_id: merchants[i].id)
-      invoice_item1 = create(:invoice_item, quantity: 1, unit_price: 100000-100*i, invoice_id: invoice1.id, item_id: item1.id)
+      invoice_item1 = create(:invoice_item, quantity: 1, invoice_id: invoice1.id, item_id: item1.id).update(unit_price: 100000-100*i)
       transaction1 = create(:transaction, invoice_id: invoice1.id, result: 0)
     end
     visit admin_merchants_path

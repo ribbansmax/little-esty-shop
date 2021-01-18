@@ -1,7 +1,7 @@
 class InvoiceItem < ApplicationRecord
   belongs_to :item
   belongs_to :invoice
-  has_many :bulk_discounts, through: :item
+  belongs_to :bulk_discount, optional: true
   after_create :find_discount, :calculate_unit_price
 
   enum status: ["pending", "packaged", "shipped"]
@@ -13,29 +13,19 @@ class InvoiceItem < ApplicationRecord
   end
 
   def find_discount
-    discount = BulkDiscount.where(merchant_id: self.item.merchant_id).where('bulk_discounts.threshold <= ?', self.quantity).order(discount: :desc).limit(1)
-    self.update(bulk_discount_id: discount)
+    my_discount = BulkDiscount.where(merchant_id: self.item.merchant_id).where('bulk_discounts.threshold <= ?', self.quantity).order(discount: :desc).pluck(:id).first
+    self.update(bulk_discount_id: my_discount)
   end
 
-  def total_price
-    # joins(:bulk_discounts).where('invoice_items.quantity >= bulk_discounts.threshold').sum('invoice_items.quantity * invoice_items.unit_price * (1 - bulk_discounts.discount)')
-    # binding.pry
-    potential_discounts = bulk_discounts.select do |discount|
-      self.quantity >= discount.threshold
-    end
-    discount = potential_discounts.max_by do |discount|
-      discount.discount
-    end
-    if discount
-      quantity * unit_price * (1 - discount.discount)
+  def calculate_unit_price
+    self.update(unit_price: (self.item.unit_price.to_f * (1 - applied_discount)).round(2))
+  end
+
+  def applied_discount
+    if bulk_discount
+      bulk_discount.discount
     else
-      quantity * unit_price
+      0
     end
-  end
-
-  def set_unit_price
-
-
-    self.update('unit_price = ?', price)
   end
 end
