@@ -1,4 +1,7 @@
 <h4><%= invoice_item.item_name %></h4>
+<% if invoice_item.bulk_discount_id %>
+  <%= render partial: "discount_link", locals: {:id => invoice_item.bulk_discount_id}%>
+<% end %>
 <h5>quantity: <%= invoice_item.quantity%>
 unit price: <%= invoice_item.unit_price %>
 status: <%= render partial: "status", locals: {

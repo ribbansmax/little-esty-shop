@@ -109,5 +109,23 @@ RSpec.describe "Merchant Invoices show" do
 
       expect(page).to have_content("Total Revenue: $#{invoice.invoice_amount}")
     end
+
+    it "links to bulk_discounts used on invoice_items" do
+      merchant1 = create(:merchant)
+      items = create_list(:item, 5, merchant: merchant1, unit_price: 100)
+      customer = create(:customer, first_name: "Linda", last_name: "Mayhew")
+      bulk_discount = create(:bulk_discount, merchant: merchant1, threshold: 4, discount: 0.50)
+      invoice = create(:invoice, customer: customer)
+
+      items.each_with_index do |item, index|
+        create(:invoice_item, item: item, invoice: invoice, quantity: index + 1)
+      end
+
+      visit merchant_invoice_path(merchant1, invoice)
+
+      within "#item-information" do
+        expect(page).to have_link("Discount", href: merchant_bulk_discount_path(merchant1, bulk_discount))
+      end
+    end
   end
 end
