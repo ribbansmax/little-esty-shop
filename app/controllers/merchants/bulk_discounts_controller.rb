@@ -37,6 +37,7 @@ class Merchants::BulkDiscountsController < ApplicationController
   def update
     @bulk_discount = BulkDiscount.find(params[:id])
     @bulk_discount.update(bulk_discount_params)
+    flash.notice = ["Discount has been updated!"]
     redirect_to merchant_bulk_discount_path(params[:merchant_id], @bulk_discount)
   end
 
