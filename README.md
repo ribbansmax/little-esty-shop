@@ -13,14 +13,15 @@
 - Webmock is used to mock API tests
 - Edge cases were added to enhance testing
 - Added view methods in application helper to declutter view calls 
-- Deployed application to [Heroku](https://gentle-forest-90792.herokuapp.com/admin)
+- Added Bulk Discounts feature
+- Deployed application to [Heroku](https://little-etsy-shop-take-2.herokuapp.com/)
 
 ## Setup
 This project requires Ruby 2.5.3.  
 This project requires Rails 5.2.3 and later  
 1. Clone this repository
 ```
-git clone https://github.com/cunninghamge/little-esty-shop
+git clone https://github.com/ribbansmax/little-esty-shop
 ```
 2. Install dependencies
 ```
@@ -61,7 +62,7 @@ Navigate [localhost:3000](http://localhost:3000)
 From [Turing School](https://github.com/turingschool-examples/little-esty-shop)
 
 ## Contributors
+[Max Ribbans](https://github.com/ribbansmax)
 [Gus Cunningham](https://github.com/cunninghamge)
 [Grayson Myers](https://github.com/GrayMyers)
-[Max Ribbans](https://github.com/ribbansmax)
 [Joe Jiang](https://github.com/ninesky00)
