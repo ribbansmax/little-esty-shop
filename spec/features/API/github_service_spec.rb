@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "GithubService" do
   before :each do 
-    @path = 'https://api.github.com/repos/cunninghamge/little-esty-shop'
+    @path = 'https://api.github.com/repos/ribbansmax/little-esty-shop'
     @github = GithubService.new(@path)
   end
   it "is a service class" do
