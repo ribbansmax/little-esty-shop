@@ -9,8 +9,14 @@ class Merchants::BulkDiscountsController < ApplicationController
   end
 
   def create
-    @bulk_discount = BulkDiscount.create(bulk_discount_params.merge(merchant_id: params[:merchant_id]))
-    redirect_to merchant_bulk_discounts_path(params[:merchant_id])
+    @bulk_discount = BulkDiscount.new(bulk_discount_params.merge(merchant_id: params[:merchant_id]))
+    if @bulk_discount.save
+      flash.notice = ["Successfully Added Discount"]
+      redirect_to merchant_bulk_discounts_path(params[:merchant_id])
+    else
+      flash.alert = @bulk_discount.errors.full_messages
+      redirect_to new_merchant_bulk_discount_path(params[:merchant_id])
+    end
   end
 
   def destroy
