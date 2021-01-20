@@ -14,7 +14,7 @@
 - Edge cases were added to enhance testing
 - Added view methods in application helper to declutter view calls 
 - Added Bulk Discounts feature
-- Deployed application to [Heroku](https://little-etsy-shop-take-2.herokuapp.com/)
+- Deployed application to [Heroku](https://little-etsy-shop-take-2.herokuapp.com/merchants)
 
 ## Setup
 This project requires Ruby 2.5.3.  
